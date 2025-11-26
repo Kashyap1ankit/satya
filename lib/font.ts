@@ -2,6 +2,7 @@ import {
   Bricolage_Grotesque,
   Plus_Jakarta_Sans,
   Inter,
+  Manrope,
 } from "next/font/google";
 
 export const brig = Bricolage_Grotesque({
@@ -17,4 +18,8 @@ export const plus = Plus_Jakarta_Sans({
 export const inter = Inter({
   weight: ["500"],
   subsets: ["greek"],
+});
+export const manrope = Manrope({
+  weight: ["400", "500", "600", "700", "800"],
+  subsets: ["cyrillic"],
 });

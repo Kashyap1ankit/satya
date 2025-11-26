@@ -3,9 +3,35 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  /* Your default theme */
+  --background: white;
+  --foreground: black;
+}
+
+[data-theme="dark"] {
+  --background: black;
+  --foreground: white;
+}
+
 @theme {
   --color-primaryBg: #111111;
   --color-green: #a6f55b;
   --color-gray: #7b7e7b;
   --color-text: #8b8b8b;
+
+  @keyframes reveal {
+    from {
+      clip-path: polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%);
+      clippath: polygon(171% 50%, 50% 171%, 50% 171%, 171% 50%);
+    }
+    to {
+      clip-path: polygon(50% -71%, -50% 71%, 50% 171%, 171% 50%);
+      clippath: polygon(171% 50%, 50% 171%, -50% 71%, 50% -71%);
+    }
+  }
+}
+
+::view-transition-new(root) {
+  animation: reveal 1s ease-out;
 }
