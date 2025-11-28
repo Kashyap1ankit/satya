@@ -1,11 +1,64 @@
+"use client";
+
 import { brig, inter, manrope } from "@/lib/font";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  ChartBubble02Icon,
   CheckmarkSquare01Icon,
-  Notification03Icon,
+  DashboardSquare03Icon,
+  DashboardSquareSettingIcon,
+  DashboardSquare01Icon,
+  ShoppingCart01Icon,
 } from "@hugeicons/core-free-icons";
 import { Button } from "./ui/button";
+import { DotPattern } from "./ui/dot-pattern";
+import { motion } from "motion/react";
+import { useState } from "react";
+
+const pricingArray = [
+  {
+    mainIcon: DashboardSquareSettingIcon,
+    tag: null,
+    name: "Basic",
+    des: "Start with basic version",
+    pricing: 20,
+    included: [
+      "100 Kodo credits/month",
+      "10 AI image generations/month",
+      "10 Magic Editor uses/month",
+      "10 projects",
+    ],
+    scale: false,
+  },
+
+  {
+    mainIcon: DashboardSquare01Icon,
+    tag: "Most Popular",
+    name: "Pro",
+    des: "Start with most used pro version",
+    pricing: 60,
+    included: [
+      "280 Kodo credits/month",
+      "20 AI image generations/month",
+      "20 Magic Editor uses/month",
+      "50 projects",
+    ],
+    scale: true,
+  },
+  {
+    mainIcon: DashboardSquare03Icon,
+    tag: null,
+    name: "Pro+",
+    des: "Start with most entripe version",
+    pricing: 200,
+    included: [
+      "1000 Kodo credits/month",
+      "50 AI image generations/month",
+      "50 Magic Editor uses/month",
+      "Unlimited projects",
+    ],
+    scale: false,
+  },
+];
 
 export default function PricingPage() {
   return (
@@ -27,69 +80,110 @@ export default function PricingPage() {
         AI features.
       </p>
 
-      <div className="grid grid-cols-3 gap-x-8">
-        <Template />
-        <Template scale={true} />
-        <Template />
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3  gap-8 mt-6">
+        {pricingArray.map((e, i) => {
+          return <Card e={e} />;
+        })}
       </div>
     </div>
   );
 }
 
-function Template({ scale = false }: { scale?: boolean }) {
+function Card({ e }: { e: any }) {
+  const [hovered, setHovered] = useState(false);
+
+  const textAnimate = {
+    initial: {
+      opacity: 1,
+      y: 0,
+    },
+
+    hover: {
+      opacity: 0,
+      y: -8,
+    },
+  };
+
+  const cartAnimate = {
+    initial: {
+      opacity: 0,
+      y: -8,
+    },
+
+    hover: {
+      opacity: 1,
+      x: [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 50, 100],
+      y: [0, -4, 0, 4, 0, -4, 0, 4, 0, -4, 0, 4, -4, 0, 4, -4, 0, 4, 0],
+    },
+  };
+
   return (
     <div
-      className={`bg-white rounded-3xl p-4 flex flex-col gap-y-6 min-w-[400px] ${
-        scale ? "scale-110 shadow-sm" : ""
+      className={` ${
+        e.scale ? "bg-white" : "bg-white/80"
+      } rounded-3xl p-4 flex flex-col gap-y-6 min-w-[400px] ${
+        e.scale ? "scale-110 shadow-sm" : ""
       }`}
     >
-      <div className="flex flex-row justify-between items-center">
-        <HugeiconsIcon
-          icon={ChartBubble02Icon}
-          stroke="1"
-          color="white"
-          fill="white"
-          size={36}
-          className="p-1 rounded-md bg-orange-400 border"
-        />
+      <div className="relative flex flex-col gap-y-6">
+        {e.scale && (
+          <DotPattern
+            className={
+              "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]"
+            }
+          />
+        )}
+        <div className=" flex flex-row justify-between items-center">
+          <HugeiconsIcon
+            icon={e.mainIcon}
+            stroke="1"
+            color="white"
+            fill="white"
+            size={36}
+            className="p-1 rounded-md bg-orange-400 border"
+          />
 
-        <p
-          className={`${manrope.className} font-medium text-xs rounded-full border border-orange-700  text-orange-700 bg-orange-200/60 px-4 py-1`}
-        >
-          Most Popular
-        </p>
-      </div>
+          {e.tag && (
+            <p
+              className={`${manrope.className} font-medium text-xs rounded-full border border-orange-700  text-orange-700 bg-orange-200/60 px-4 py-1`}
+            >
+              {e.tag}
+            </p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-y-2">
-        <p className={`${manrope.className} font-bold text-2xl`}>Starter</p>
+        <div className="flex flex-col gap-y-2">
+          <p className={`${manrope.className} font-bold text-2xl`}>{e.name}</p>
 
-        <p className={`${manrope.className} font-medium text-sm text-gray-500`}>
-          Start with basic and free version
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-y-1">
-        <div className="flex flex-row items-end justify-start gap-x-2">
-          <p className={`${brig.className} font-bold text-4xl`}>$0</p>
           <p
             className={`${manrope.className} font-medium text-sm text-gray-500`}
           >
-            /mo
+            {e.des}
           </p>
         </div>
 
-        <p className={`${manrope.className} font-normal text-xs text-gray-400`}>
-          Pause and cancel any time
-        </p>
+        <div className="flex flex-col gap-y-1">
+          <div className="flex flex-row items-end justify-start gap-x-2">
+            <p className={`${brig.className} font-bold text-4xl`}>
+              ${e.pricing}
+            </p>
+            <p
+              className={`${manrope.className} font-medium text-sm text-gray-500`}
+            >
+              /mo
+            </p>
+          </div>
+
+          <p
+            className={`${manrope.className} font-normal text-xs text-gray-400`}
+          >
+            Pause and cancel any time
+          </p>
+        </div>
       </div>
 
       <div className="bg-[#F8F7F4] rounded-3xl p-4 border border-neutral-100 inset-shadow-sm inset-shadow-black/10 flex flex-col gap-y-2">
-        {[
-          "30 Kodo credits/month",
-          "3 AI image generations/month",
-          "3 Magic Editor uses/month",
-          "3 projects",
-        ].map((e, i) => {
+        {e.included.map((e: any, i: any) => {
           return (
             <div
               key={i}
@@ -110,11 +204,39 @@ function Template({ scale = false }: { scale?: boolean }) {
 
       <Button
         size={"lg"}
-        className="bg-orange-400 rounded-full inset-shadow-sm inset-shadow-white/50 "
+        className={`${
+          e.scale ? "bg-orange-400" : "bg-orange-400/80"
+        } rounded-full inset-shadow-sm inset-shadow-white/50 cursor-pointer group relative`}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <p className={`${manrope.className} text-md font-bold text-white`}>
+        <motion.p
+          variants={textAnimate}
+          initial="initial"
+          animate={hovered ? "hover" : "initial"}
+          className={`${manrope.className} text-md font-bold text-white `}
+        >
           Upgrade Plan
-        </p>
+        </motion.p>
+
+        <motion.div
+          variants={cartAnimate}
+          initial="initial"
+          animate={hovered ? "hover" : "initial"}
+          transition={{
+            duration: 2,
+          }}
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          <HugeiconsIcon
+            icon={ShoppingCart01Icon}
+            stroke="2"
+            color="white"
+            fill="orange"
+            size={52}
+            className="size-6"
+          />
+        </motion.div>
       </Button>
     </div>
   );
